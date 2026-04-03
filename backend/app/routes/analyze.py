@@ -78,7 +78,8 @@ async def analyze_code(request: CodeAnalysisRequest):
         algorithm_info = algorithm_detector.get_algorithm_info(algorithm)
         
         # Estimate complexity
-        complexity = complexity_estimator.estimate(structure, algorithm, request.language)
+        complexity_raw = complexity_estimator.estimate(structure, algorithm, request.language)
+        complexity = complexity_raw.get('time_complexity', 'Unknown') if isinstance(complexity_raw, dict) else str(complexity_raw)
         
         # Detect bugs using rule engine
         rules = rule_engine.get_rules_for_language(request.language)
