@@ -40,7 +40,14 @@ class Settings(BaseSettings):
 # Create settings instance
 settings = Settings()
 
-# Ensure directories exist
-os.makedirs(settings.SANDBOX_DIR, exist_ok=True)
-os.makedirs(settings.EXECUTION_LOGS_DIR, exist_ok=True)
-os.makedirs(settings.TEST_CASES_DIR, exist_ok=True)
+# Resolve directories relative to the backend root
+BACKEND_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+def get_abs_path(relative_path):
+    return os.path.join(BACKEND_ROOT, relative_path)
+
+# Ensure directories exist using absolute paths
+os.makedirs(get_abs_path(settings.SANDBOX_DIR), exist_ok=True)
+os.makedirs(get_abs_path(settings.EXECUTION_LOGS_DIR), exist_ok=True)
+os.makedirs(get_abs_path(settings.TEST_CASES_DIR), exist_ok=True)
+
